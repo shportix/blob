@@ -1,0 +1,28 @@
+type: object
+required:
+  - id
+  - type
+properties:
+  id:
+    type: string
+    example: blah
+  type:
+    type: string
+    description: blob type
+    example: asset_description
+    enum:
+      - asset_description
+      - fund_overview
+      - fund_update
+      - nav_update
+      - fund_document
+      - alpha
+      - bravo
+      - charlie
+      - delta
+      - token_terms
+      - token_metrics
+      - kyc_form
+      - kyc_id_document
+      - kyc_poa
+      - identity_mind_reject
