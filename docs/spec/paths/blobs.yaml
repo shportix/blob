@@ -1,0 +1,14 @@
+get:
+  tags:
+    - Blobs list
+  summary: Get all blobs from db
+  operationId: getBlobsList
+  parameters:
+    - $ref: '#/components/parameters/pageNumberParam'
+    - $ref: '#/components/parameters/pageLimitParam'
+    - $ref: '#/components/parameters/sortingParam'
+    - in: query
+      name: 'filter[id]'
+      required: false
+      schema:
+        type: int
