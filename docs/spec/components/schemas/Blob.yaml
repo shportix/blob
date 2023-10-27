@@ -1,15 +1,16 @@
-allOf:
-  - $ref: '#/components/schemas/BlobKey'
-  - type: object
-    required:
-      - attributes
-    properties:
-      attributes:
-        type: object
-        properties:
-          value:
-            description: arbitrary text
-            type: string
-            example: foobar
-        required:
-          - value
+type: object
+required:
+  - id
+  - type
+  - user
+properties:
+  id:
+    type: string
+    example: blah
+  type:
+    type: string
+    description: blob type
+    example: asset_description
+  user:
+    type: object
+    $ref: '#/components/schemas/AccountKey.yaml'
