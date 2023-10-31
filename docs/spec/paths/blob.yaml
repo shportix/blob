@@ -1,0 +1,68 @@
+post:
+  tags:
+    - Blob
+  summary: Create blob
+  operationId: createBlob
+  requestBody:
+    content:
+      aplication/json:
+        schema:
+          type: object
+          required:
+            - data
+          properties:
+            data:
+              type: object
+              $ref: '#/components/schemas/Blob'
+  responses:
+    '201':
+      description: Created
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - data
+            properties:
+              data:
+                type: object
+                $ref: '#/components/schemas/Blob'
+    '401':
+      description: blob creation not allowed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    '404':
+      description: account does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+    '500':
+      description: failed to save blob
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+get:
+  tags:
+    - Blob
+  summary: Get all blobs from db
+  operationId: getBlobsList
+  parameters:
+    - $ref: '#/components/parameters/pageNumberParam'
+    - $ref: '#/components/parameters/pageLimitParam'
+    - $ref: '#/components/parameters/sortingParam'
+    - in: query
+      name: 'filter[id]'
+      required: false
+      schema:
+        type: integer
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BlobList'

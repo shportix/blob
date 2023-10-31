@@ -2,7 +2,7 @@ type: object
 required:
   - id
   - type
-  - user
+  - relationship
 properties:
   id:
     type: string
@@ -11,6 +11,11 @@ properties:
     type: string
     description: blob type
     example: asset_description
-  user:
+  relationship:
     type: object
-    $ref: '#/components/schemas/AccountKey.yaml'
+    required:
+      - owner
+    properties:
+      owner:
+        type: object
+        $ref: '#/components/schemas/AccountKey'

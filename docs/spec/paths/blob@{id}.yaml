@@ -1,0 +1,24 @@
+get:
+  tags:
+    - Blob
+  summary: Get one blob from db by it`s id
+  operationId: getBlobById
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BlobResp'
+    '404':
+      description: Not found
+delete:
+  tags:
+    - Blob
+  summary: Deletion one blob from db by it`s id
+  operationId: deleteBlobById
+  responses:
+    '200':
+      description: Success
+    '404':
+      description: Not found

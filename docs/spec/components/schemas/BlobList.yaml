@@ -1,0 +1,9 @@
+type: object
+required:
+  - type
+  - data
+properties:
+  data:
+    type: array
+    items:
+      $ref: '#/components/schemas/Blob'
