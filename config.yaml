@@ -3,14 +3,17 @@ log:
   disable_sentry: true
 
 db:
-  url: db_url
+  url: postgres://core:core@localhost:5432/core?sslmode=disable
 
 listener:
-  addr: :8000
+  addr: :8010
+
+registration_api:
+  addr: :8011
 
 cop:
   disabled: true
-  endpoint: "http://..."
-  upstream: "http://..."
+  endpoint: "http://localhost:90"
+  upstream: "http://localhost:88"
   service_name: blob-svc
-  service_port: 80
+  service_port: 88

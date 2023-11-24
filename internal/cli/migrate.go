@@ -7,9 +7,8 @@ import (
 	"gitlab.com/distributed_lab/logan/v3/errors"
 )
 
-var migrations = &migrate.EmbedFileSystemMigrationSource{
-	FileSystem: assets.Migrations,
-	Root:       "migrations",
+var migrations = &migrate.PackrMigrationSource{
+	Box: assets.Migrations,
 }
 
 func MigrateUp(cfg config.Config) error {
