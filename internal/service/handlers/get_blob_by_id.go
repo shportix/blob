@@ -26,7 +26,7 @@ func GetBlob(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	allowed, _, err := helpers.CheckPermission(w, r, blob.OwnerAddress)
+	allowed, _ := helpers.CheckPermission(w, r, blob.OwnerAddress)
 	if !allowed {
 		return
 	}

@@ -19,7 +19,7 @@ import (
 const create = "create"
 
 func CreateBlob(w http.ResponseWriter, r *http.Request) {
-	allowed, signer, err := helpers.CheckPermission(w, r, create)
+	allowed, signer := helpers.CheckPermission(w, r, create)
 	if !allowed {
 		return
 	}

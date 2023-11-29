@@ -15,11 +15,11 @@ const (
 )
 
 func GetBlobsList(w http.ResponseWriter, r *http.Request) {
-	allowed, _, err := helpers.CheckPermission(w, r, admin)
+	allowed, _ := helpers.CheckPermission(w, r, admin)
 	if !allowed {
 		return
 	}
-	_, err = requests.NewGetBlobsListRequest(r)
+	_, err := requests.NewGetBlobsListRequest(r)
 	if err != nil {
 		ape.RenderErr(w, problems.BadRequest(err)...)
 		return

@@ -22,7 +22,7 @@ func DeleteBlob(w http.ResponseWriter, r *http.Request) {
 		ape.Render(w, problems.InternalError())
 		return
 	}
-	allowed, _, err := helpers.CheckPermission(w, r, blob.OwnerAddress)
+	allowed, _ := helpers.CheckPermission(w, r, blob.OwnerAddress)
 	if !allowed {
 		return
 	}

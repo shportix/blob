@@ -44,18 +44,6 @@ func (q *blobRequestsQ) DeleteOld() error {
 	return err
 }
 
-func (q *blobRequestsQ) Delete(blobRequestId int64) error {
-	stmt := sq.Delete(blobRequestsTableName).Where("id = ?", blobRequestId)
-	err := q.db.Exec(stmt)
-	return err
-}
-
-func (q *blobRequestsQ) Select() ([]data.BlobRequest, error) {
-	var result []data.BlobRequest
-	err := q.db.Select(&result, q.sql)
-	return result, err
-}
-
 func (q *blobRequestsQ) Transaction(fn func(q data.BlobRequestsQ) error) error {
 	return q.db.Transaction(func() error {
 		return fn(q)
@@ -70,11 +58,6 @@ func (q *blobRequestsQ) Insert(value data.BlobRequest) (data.BlobRequest, error)
 	err := q.db.Get(&result, stmt)
 
 	return result, err
-}
-
-func (q *blobRequestsQ) Page(pageParams pgdb.OffsetPageParams) data.BlobRequestsQ {
-	q.sql = pageParams.ApplyTo(q.sql, "id")
-	return q
 }
 
 func (q *blobRequestsQ) FilterBySign(signs ...string) data.BlobRequestsQ {

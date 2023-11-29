@@ -15,12 +15,12 @@ const (
 	create = "create"
 )
 
-func CheckPermission(w http.ResponseWriter, r *http.Request, owner string) (bool, string, error) {
+func CheckPermission(w http.ResponseWriter, r *http.Request, owner string) (bool, string) {
 	signature := r.Header.Get("Signature")
 	date, err := time.Parse(http.TimeFormat, r.Header.Get("date"))
 	if err != nil {
 		ape.RenderErr(w, problems.InternalError())
-		return false, "", err
+		return false, ""
 	}
 	realRequestTarget := r.Header.Get("Real-Request-Target")
 
@@ -28,11 +28,11 @@ func CheckPermission(w http.ResponseWriter, r *http.Request, owner string) (bool
 	blobRequests, err := blobRequestsQ.FilterBySign(signature).Get()
 	if err != nil {
 		ape.RenderErr(w, problems.InternalError())
-		return false, "", err
+		return false, ""
 	}
 	if blobRequests != nil && blobRequests.Date.Equal(date) && blobRequests.RealRequestTarget == realRequestTarget {
 		ape.RenderErr(w, problems.Forbidden())
-		return false, "", nil
+		return false, ""
 	}
 
 	err = BLobRequestsQ(r).Transaction(func(q data.BlobRequestsQ) error {
@@ -52,24 +52,25 @@ func CheckPermission(w http.ResponseWriter, r *http.Request, owner string) (bool
 	})
 	if err != nil {
 		ape.RenderErr(w, problems.InternalError())
-		return false, "", err
+		return false, ""
 	}
 
 	err = blobRequestsQ.DeleteOld()
 	if err != nil {
 		ape.RenderErr(w, problems.InternalError())
-		return false, "", err
+		return false, ""
 	}
 
 	signer, err := signcontrol.CheckSignature(r)
 	if err != nil {
 		ape.RenderErr(w, problems.Forbidden())
-		return false, signer, err
+		return false, signer
 	}
 	err = errors.New("Wrong signer")
-	if owner == create || owner == signer || owner == admin {
-		return true, signer, nil
+	if owner == create || signer == signer || signer == admin {
+		return true, signer
 	}
+	Log(r).Info("hear")
 	ape.RenderErr(w, problems.Forbidden())
-	return false, signer, err
+	return false, signer
 }
