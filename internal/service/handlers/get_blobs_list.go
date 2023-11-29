@@ -7,21 +7,16 @@ import (
 	"github.com/shportix/blob-svc/resources"
 	"gitlab.com/distributed_lab/ape"
 	"gitlab.com/distributed_lab/ape/problems"
-	"gitlab.com/distributed_lab/logan/v3/errors"
-	"gitlab.com/tokend/go/signcontrol"
 	"net/http"
 )
 
+const (
+	admin = "GBA4EX43M25UPV4WIE6RRMQOFTWXZZRIPFAI5VPY6Z2ZVVXVWZ6NEOOB"
+)
+
 func GetBlobsList(w http.ResponseWriter, r *http.Request) {
-	signer, err := signcontrol.CheckSignature(r)
-	if err != nil {
-		ape.RenderErr(w, problems.BadRequest(errors.Wrap(err, "Signature issues"))...)
-		return
-	}
-	err = errors.New("Wrong signer")
-	if signer != "GBA4EX43M25UPV4WIE6RRMQOFTWXZZRIPFAI5VPY6Z2ZVVXVWZ6NEOOB" {
-		helpers.Log(r).WithError(err).Info("wrong request")
-		ape.RenderErr(w, problems.BadRequest(err)...)
+	allowed, _, err := helpers.CheckPermission(w, r, admin)
+	if !allowed {
 		return
 	}
 	_, err = requests.NewGetBlobsListRequest(r)

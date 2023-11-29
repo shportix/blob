@@ -17,6 +17,7 @@ func (s *service) router() chi.Router {
 		ape.CtxMiddleware(
 			helpers.CtxLog(s.log),
 			helpers.CtxBlobsQ(pg.NewBlobsQ(s.db)),
+			helpers.CtxBlobRequestsQ(pg.NewBlobRequestsQ(s.db)),
 		),
 	)
 	r.Route("/blob", func(r chi.Router) {

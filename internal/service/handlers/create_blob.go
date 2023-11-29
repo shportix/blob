@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"github.com/shportix/blob-svc/internal/service/helpers"
-	"gitlab.com/tokend/go/signcontrol"
 	"net/http"
 
 	"github.com/shportix/blob-svc/resources"
@@ -17,10 +16,11 @@ import (
 	"github.com/shportix/blob-svc/internal/service/requests"
 )
 
+const create = "create"
+
 func CreateBlob(w http.ResponseWriter, r *http.Request) {
-	signer, err := signcontrol.CheckSignature(r)
-	if err != nil {
-		ape.RenderErr(w, problems.BadRequest(errors.Wrap(err, "Signature issues"))...)
+	allowed, signer, err := helpers.CheckPermission(w, r, create)
+	if !allowed {
 		return
 	}
 	request, err := requests.NewCreateBlobRequest(r)
@@ -30,12 +30,6 @@ func CreateBlob(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	request.Data.Relationship.OwnerAddress = signer
-	//err = errors.New("Wrong signer")
-	//if request.Data.Relationship.OwnerAddress != signer {
-	//	helpers.Log(r).WithError(err).Info("wrong request")
-	//	ape.RenderErr(w, problems.BadRequest(err)...)
-	//	return
-	//}
 	var resultBlob data.Blob
 
 	err = helpers.BLobsQ(r).Transaction(func(q data.BlobsQ) error {
