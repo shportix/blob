@@ -72,7 +72,6 @@ func CheckPermission(w http.ResponseWriter, r *http.Request, owner string) (bool
 	if owner == create || signer == owner || signer == admin {
 		return true, signer
 	}
-	Log(r).Info("hear")
 	ape.RenderErr(w, problems.Forbidden())
 	return false, signer
 }
