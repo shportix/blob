@@ -69,7 +69,7 @@ func CheckPermission(w http.ResponseWriter, r *http.Request, owner string) (bool
 		return false, signer
 	}
 	err = errors.New("Wrong signer")
-	if owner == create || signer == signer || signer == admin {
+	if owner == create || signer == owner || signer == admin {
 		return true, signer
 	}
 	Log(r).Info("hear")
