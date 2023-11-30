@@ -11,18 +11,20 @@ import (
 )
 
 const (
-	admin  = "GBA4EX43M25UPV4WIE6RRMQOFTWXZZRIPFAI5VPY6Z2ZVVXVWZ6NEOOB"
-	create = "create"
+	admin                = "GBA4EX43M25UPV4WIE6RRMQOFTWXZZRIPFAI5VPY6Z2ZVVXVWZ6NEOOB"
+	create               = "create"
+	signatureHeader      = "Signature"
+	realTimeTargetHeader = "Real-Request-Target"
 )
 
 func CheckPermission(w http.ResponseWriter, r *http.Request, owner string) (bool, string) {
-	signature := r.Header.Get("Signature")
+	signature := r.Header.Get(signatureHeader)
 	date, err := time.Parse(http.TimeFormat, r.Header.Get("date"))
 	if err != nil {
 		ape.RenderErr(w, problems.InternalError())
 		return false, ""
 	}
-	realRequestTarget := r.Header.Get("Real-Request-Target")
+	realRequestTarget := r.Header.Get(realTimeTargetHeader)
 
 	blobRequestsQ := BLobRequestsQ(r)
 	blobRequests, err := blobRequestsQ.FilterBySign(signature).Get()
